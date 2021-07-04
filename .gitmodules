@@ -1,0 +1,3 @@
+[submodule "data/Coswara_Data"]
+	path = data/Coswara_Data
+	url = https://github.com/iiscleap/Coswara-Data.git

@@ -1,0 +1,6 @@
+.idea
+data/extracted/*
+data/Coswara-Data/*
+
+venv
+env
