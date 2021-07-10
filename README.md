@@ -29,3 +29,15 @@ src/
 - train_model.py: After `export_data` has been executed, run this script to train our model, using the generated Mel Spectrum output.
 
 - utils.py: Utilities class.
+
+# Step to install
+1. Git clone the repository
+2. Either run extract_data.sh, or manually download Coswara_Data and extract the data somewhere
+3. Edit `data_config.py` to match the input path and output path.
+4. Run `export_data.py` to generate the Mel Spectrum data
+5. Run `train_model.py` to start training our first model
+6. ???
+
+# Packages
+- Everything should be listed under requirements.txt
+
