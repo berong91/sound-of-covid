@@ -3,8 +3,18 @@ import pandas as pd
 
 from utils import _normalize_path
 
+# To export image into output folder
+EXPORT_IMAGE = False
+
+# Source Coswara folder for metadata loading
 PREFIX_INPUT = r'../data/Coswara_Data'
+
+# Path to the extracted data
+EXTRACTED_DATA_PATH = r'../data/extracted'
+
+# Dest path for the post-processing data output
 PREFIX_OUTPUT = r'../data/raw'
+
 BANNED_ID = [
     'XFX3DxpzWlTsqde0wmliVzvRXnf1', 'pBBuvcoBj7hjmNVYFICT4hQYRGw1', 'jaaBKWGuppchj0ahnBiFzFeuBB23',
     'Tfvspm3rapd3ZLyAoMG36VxNQnr2', 'f9g4olEAspen4dJakQJsI2EME032', 'VxQekDvwa3N5B2FqB4FlQ5jBjTp2',

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras import Input
@@ -124,9 +126,9 @@ cnn_model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accu
 # cnn_model.fit(X_train, y_train, epochs=10, verbose=1)
 # cnn_model.fit(training_generator, use_multiprocessing=True, workers=4)
 cnn_model.fit(training_generator, epochs=10, verbose=1)
+model_name = 'train_model.{}.{}.{}'.format('_'.join(index_col), '_'.join(key_col), datetime.now())
+cnn_model.save(model_name)
 
 # evaluate the model on the test data
 loss, acc = cnn_model.evaluate(validation_generator, verbose=1)
 print('Test accuracy = %.4f' % acc)
-
-cnn_model.save('./train_model')

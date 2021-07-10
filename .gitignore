@@ -1,6 +1,7 @@
 .idea
-data/extracted/*
-data/Coswara-Data/*
+data/extracted/**
+data/Coswara-Data/**
+**/train_model*
 
 venv
 env
@@ -8,7 +9,7 @@ env
 
 # Py shit
 # Byte-compiled / optimized / DLL files
-__pycache__/
+**/__pycache__
 *.py[cod]
 *$py.class
 

@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.io import wavfile
 
-from data_config import PREFIX_INPUT, PREFIX_OUTPUT, BANNED_ID, key_col
+from data_config import PREFIX_INPUT, PREFIX_OUTPUT, BANNED_ID, key_col, EXPORT_IMAGE, EXTRACTED_DATA_PATH
 from utils import _normalize_path, stft_spectrogram, mel_filter
 
 
@@ -35,7 +35,7 @@ def main():
     index_wav = {}
 
     # scrambling through the extracted WAV files and map them with corresponded patient ID
-    for path, folder, files in os.walk(_normalize_path('{}/data/extracted/'.format(PREFIX_INPUT))):
+    for path, folder, files in os.walk(_normalize_path(EXTRACTED_DATA_PATH)):
         # extract sample ID from path
         id = os.path.basename(path)
         if id in BANNED_ID:
@@ -66,10 +66,11 @@ def main():
                 # read wav file and parse into spectrogram
                 sample_rate, audio = wavfile.read(wav_path)
                 t, f, spectrogram = stft_spectrogram(sample_rate, audio, NFFT=NFFT)
-                # spec(t, f, spectrogram, spec_img)  # show graph
-
                 mel_spectrum = mel_filter(spectrogram, sample_rate=sample_rate, NFFT=NFFT, nfilt=num_filter)
-                # mel_spec(t, np.arange(0, num_filter / 10, 0.1), mel_spectrum, mel_img)  # show graph
+
+                if EXPORT_IMAGE:
+                    spec(t, f, spectrogram, spec_img)  # show graph
+                    mel_spec(t, np.arange(0, num_filter / 10, 0.1), mel_spectrum, mel_img)  # show graph
 
                 index_wav.setdefault(id, np.ndarray)
                 index_wav[id] = mel_spectrum
