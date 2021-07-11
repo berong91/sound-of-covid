@@ -13,7 +13,7 @@ PREFIX_INPUT = r'../data/Coswara_Data'
 EXTRACTED_DATA_PATH = r'../data/extracted'
 
 # Dest path for the post-processing data output
-PREFIX_OUTPUT = r'../data/raw'
+PREFIX_OUTPUT = r'D:\Projects\comp-7405-proj\mel_spectrum'
 
 BANNED_ID = [
     'XFX3DxpzWlTsqde0wmliVzvRXnf1', 'pBBuvcoBj7hjmNVYFICT4hQYRGw1', 'jaaBKWGuppchj0ahnBiFzFeuBB23',
@@ -28,7 +28,7 @@ BANNED_ID = [
     'Ts5Rbl9h9pWKqCQPJwoTduGvjMm2', 'c18b81Qa5YY2RbEzblDNxMNQE312', ]
 
 # index_col = ['covid_status', 'test_status']
-index_col = ['covid_status']
+index_col = ['test_status']
 key_col = ['cough-heavy']
 
 

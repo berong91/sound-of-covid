@@ -60,7 +60,6 @@ class DataGenerator(keras.utils.Sequence):
             # Store class
             y[i] = self.y_list[indexes[i]]
 
-        # return X, keras.utils.to_categorical(y, num_classes=self.n_classes)
         return X, keras.utils.to_categorical(y, num_classes=self.n_classes)
 
     def on_epoch_end(self):
@@ -106,8 +105,15 @@ num_pixels = (num_pixels[0], num_pixels[1], 1)
 # Layer 5: Fully connected NN layer with n = num_classes nodes, g = softmax
 cnn_model = Sequential()
 cnn_model.add(Input(shape=num_pixels))
+
+# cnn_model.add(Conv2D(64, (3, 3), activation='relu'))
+# cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+# cnn_model.add(Conv2D(32, (3, 3), padding='same'))
+# cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+
 cnn_model.add(Conv2D(32, (3, 3), activation='relu'))
 cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+
 cnn_model.add(Flatten())
 cnn_model.add(Dense(100, activation='relu'))
 cnn_model.add(Dense(num_classes, activation='softmax'))
@@ -117,7 +123,7 @@ cnn_model.summary()
 
 # compile the model using
 # a. Optimizer: gradient descent  with a learning rate of 0.1
-# b. Loss function: sparse_categorical_crossentropy
+# b. Loss function: categorical_crossentropy
 # c. Metrics: accuracy
 opt = SGD(learning_rate=0.1)
 cnn_model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
@@ -126,9 +132,12 @@ cnn_model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accu
 # cnn_model.fit(X_train, y_train, epochs=10, verbose=1)
 # cnn_model.fit(training_generator, use_multiprocessing=True, workers=4)
 cnn_model.fit(training_generator, epochs=10, verbose=1)
-model_name = 'train_model.{}.{}.{}'.format('_'.join(index_col), '_'.join(key_col), datetime.now())
-cnn_model.save(model_name)
+
 
 # evaluate the model on the test data
 loss, acc = cnn_model.evaluate(validation_generator, verbose=1)
 print('Test accuracy = %.4f' % acc)
+
+# Save model
+model_name = 'train_model_{}.{}'.format('_'.join(index_col), '_'.join(key_col))
+cnn_model.save(model_name)

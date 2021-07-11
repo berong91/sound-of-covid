@@ -2,9 +2,10 @@ import os
 
 import numpy as np
 from matplotlib import pyplot as plt
+from scipy.fft import dct
 from scipy.io import wavfile
 
-from data_config import PREFIX_INPUT, PREFIX_OUTPUT, BANNED_ID, key_col, EXPORT_IMAGE, EXTRACTED_DATA_PATH
+from data_config import PREFIX_OUTPUT, BANNED_ID, key_col, EXPORT_IMAGE, EXTRACTED_DATA_PATH
 from utils import _normalize_path, stft_spectrogram, mel_filter
 
 
@@ -64,9 +65,18 @@ def main():
                 mel_img = _normalize_path('{}/{}_{}_mel.png'.format(PREFIX_OUTPUT, id, feature))
 
                 # read wav file and parse into spectrogram
+                # Fourier-Transform and Power Spectrum
                 sample_rate, audio = wavfile.read(wav_path)
                 t, f, spectrogram = stft_spectrogram(sample_rate, audio, NFFT=NFFT)
+
+                # Mel Filter Banks power spectrum
                 mel_spectrum = mel_filter(spectrogram, sample_rate=sample_rate, NFFT=NFFT, nfilt=num_filter)
+                mel_spectrum -= (np.mean(mel_spectrum, axis=0) + 1e-8)  # Mean Normalization
+
+                # Mel-frequency Cepstral Coefficients (MFCCs)
+                num_ceps = 12
+                mfcc = dct(mel_spectrum, type=2, axis=1, norm='ortho')[:, 1: (num_ceps + 1)]  # Keep 2-13
+                mfcc -= (np.mean(mfcc, axis=0) + 1e-8)  # Mean Normalization
 
                 if EXPORT_IMAGE:
                     spec(t, f, spectrogram, spec_img)  # show graph
