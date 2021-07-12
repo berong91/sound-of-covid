@@ -13,7 +13,7 @@ PREFIX_INPUT = r'../data/Coswara_Data'
 EXTRACTED_DATA_PATH = r'../data/extracted'
 
 # Dest path for the post-processing data output
-PREFIX_OUTPUT = r'D:\Projects\comp-7405-proj\mel_spectrum'
+PREFIX_OUTPUT = r'../data/raw'
 
 BANNED_ID = [
     'XFX3DxpzWlTsqde0wmliVzvRXnf1', 'pBBuvcoBj7hjmNVYFICT4hQYRGw1', 'jaaBKWGuppchj0ahnBiFzFeuBB23',
@@ -25,7 +25,13 @@ BANNED_ID = [
     'sbdVe2aEGKeFcPXdhSf5QOuA5qA3', 'SG95RAgm0wY3bzyIZPPSpHwyYuD3', 'TLfuOcZh0HfnVRRdez4CxLFiPki2',
     'Vq1h51z5x3Wp4wS2pCm6yEAZvu82', '8Iug9hOgiBZTCKZuDxazXlamW0g1', 'zFDUIa5rb2OG7IXXSI5vXVsoLa32',
     'DycfRd7vyobY2PgwT3rQOemSbP53', 'JUVJnOVJKKcdzppK3hkci4TO4ij1', 'kgjTguvo3vZJTO7F1qO9GxEicbA3',
-    'Ts5Rbl9h9pWKqCQPJwoTduGvjMm2', 'c18b81Qa5YY2RbEzblDNxMNQE312', ]
+    'Ts5Rbl9h9pWKqCQPJwoTduGvjMm2', 'c18b81Qa5YY2RbEzblDNxMNQE312', '2XgDqzQkqLX9SbmSHfbqdRxSmRD2',
+    'abpYyjmAQAMGlnyqXPGIL9lbnQo2', 'Qriv4y0rwfWRZDatFMOj9zdXeB43', 'j1vkslz2yvP8MMGGhjPnZE4CVlg2',
+    'imhxF3UQDZNVEnNeyw8jOAsgtjv2', 'HdJdEWQecehLzEQcyDV7vjr85C82', 'V3EIT06H4JN5KwoK8aGRXQNzGRi1',
+    'CFwFsoyLtGUxPNPw5vMD7cznAnO2', 'QlMu7Fl8iIgOZM3QHEOzOJY6npH3', 'htQzROl26OWQpIYFDzv11F79PLR2',
+    'htQzROl26OWQpIYFDzv11F79PLR2', 'UiUUhL0PMjWVA6W2dKte1DCE6wG2', 'tiKv850hJFTmpCAvfJOmOOqkeUs1',
+    'zvXkuEaPb0OEgG4EHx59NqdmamR2', 'U98J2q0NnycYzzUS2BYZpUa55X83',
+]
 
 # index_col = ['covid_status', 'test_status']
 index_col = ['test_status']
@@ -83,7 +89,7 @@ def get_data():
 
 
 def get_wav_data(data: pd.DataFrame) -> pd.DataFrame:
-    for id in data.index:
-        npz_raw = _normalize_path('{}/{}.npz'.format(PREFIX_OUTPUT, id))
-        data.loc[id, key_col[0]] = npz_raw
+    for i in data.index:
+        npz_raw = _normalize_path('{}/{}.npz'.format(PREFIX_OUTPUT, i))
+        data.loc[i, key_col[0]] = npz_raw
     return data

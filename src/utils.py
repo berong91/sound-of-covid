@@ -1,13 +1,14 @@
 import os
 import random
 from datetime import datetime
-from typing import Tuple, List, Dict
+from typing import Tuple, List
 
 import numpy as np
 from scipy import signal
+from scipy.fft import dct
 
 
-def _normalize_path(filepath: str) -> None:
+def _normalize_path(filepath: str) -> str:
     result = os.path.expanduser(filepath) if '~' in filepath else filepath
     return os.path.realpath(os.path.abspath(result))
 
@@ -19,7 +20,7 @@ def stft_spectrogram(rate, audio, NFFT=256) -> Tuple[np.ndarray, ...]:
     return t, f, Zxx
 
 
-def mel_filter(Zxx: np.ndarray, sample_rate: int, NFFT: np.ndarray = 256, nfilt: int = 40):
+def mel_filter(Zxx: np.ndarray, sample_rate: int, NFFT: int = 256, nfilt: int = 40) -> np.ndarray:
     low_freq_mel = 0
     high_freq_mel = (2595 * np.log10(1 + (sample_rate / 2) / 700))  # Convert Hz to Mel
     mel_points = np.linspace(low_freq_mel, high_freq_mel, nfilt + 2)  # Equally spaced in Mel scale
@@ -36,10 +37,17 @@ def mel_filter(Zxx: np.ndarray, sample_rate: int, NFFT: np.ndarray = 256, nfilt:
             fbank[m - 1, k] = (k - bin[m - 1]) / (bin[m] - bin[m - 1])
         for k in range(f_m, f_m_plus):
             fbank[m - 1, k] = (bin[m + 1] - k) / (bin[m + 1] - bin[m])
-    filter_banks = np.dot(Zxx.T, fbank.T).T
+    filter_banks = np.dot(fbank, Zxx)
     filter_banks = np.where(filter_banks == 0, np.finfo(float).eps, filter_banks)  # Numerical Stability
     filter_banks = 20 * np.log10(filter_banks)  # dB
     return filter_banks
+
+
+def mfcc(filter_banks: np.ndarray, num_ceps=20):
+    # Mel-frequency Cepstral Coefficients (MFCCs)
+    mfcc = dct(filter_banks, type=2, axis=1, norm='ortho')
+    mfcc = mfcc[1: (num_ceps + 1), :]  # Keep 2-13
+    return mfcc
 
 
 def prepare_data(data: np.ndarray,
