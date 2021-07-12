@@ -54,7 +54,8 @@ def prepare_data(data: np.ndarray,
                  ratio: float,
                  index_col: List[str],
                  key_col: List[str],
-                 randomize: bool = False) -> Tuple[np.ndarray, ...]:
+                 randomize: bool = False,
+                 seed=datetime.now()) -> Tuple[np.ndarray, ...]:
     # split the data into training set and test set
     # use 75 percent of the data to train the model and hold back 25 percent for testing
     train_ratio = ratio
@@ -67,7 +68,7 @@ def prepare_data(data: np.ndarray,
     # If randomize is true, then we generate re-arrange the list randomly
     if randomize:
         # shuffle the indices
-        random.seed(datetime.now())
+        random.seed(seed)
         random.shuffle(indices)
 
     train_indices = indices[:train_set_size]

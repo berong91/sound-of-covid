@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras import Input
@@ -8,6 +6,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import SGD
 
 import utils
+from data_config import PREFIX_MODEL, POSTFIX_MODEL, SEED
 from data_config import get_data, get_wav_data
 from data_config import key_col, index_col
 
@@ -70,7 +69,8 @@ class DataGenerator(keras.utils.Sequence):
 data = get_data()
 data = get_wav_data(data)
 # Split them out by 0.7 ratio
-(X_test, y_test, X_train, y_train) = utils.prepare_data(data, ratio=0.7, index_col=index_col, key_col=key_col)
+(X_test, y_test, X_train, y_train) = utils.prepare_data(data, ratio=0.7, index_col=index_col, key_col=key_col,
+                                                        randomize=True, seed=SEED)
 
 print('X_train.shape:', X_train.shape)
 print('X_test.shape:', X_test.shape)
@@ -110,6 +110,7 @@ cnn_model.add(Input(shape=num_pixels))
 # cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
 # cnn_model.add(Conv2D(32, (3, 3), padding='same'))
 # cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+# cnn_model.add(Conv2D(32, (3, 3), padding='same'))
 
 cnn_model.add(Conv2D(32, (3, 3), activation='relu'))
 cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -133,11 +134,10 @@ cnn_model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accu
 # cnn_model.fit(training_generator, use_multiprocessing=True, workers=4)
 cnn_model.fit(training_generator, epochs=10, verbose=1)
 
-
 # evaluate the model on the test data
 loss, acc = cnn_model.evaluate(validation_generator, verbose=1)
 print('Test accuracy = %.4f' % acc)
 
 # Save model
-model_name = 'train_model_{}.{}'.format('_'.join(index_col), '_'.join(key_col))
+model_name = '{}/{}-{}-{}'.format(PREFIX_MODEL, '_'.join(index_col), '_'.join(key_col), POSTFIX_MODEL)
 cnn_model.save(model_name)

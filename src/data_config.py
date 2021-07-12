@@ -4,6 +4,7 @@ import pandas as pd
 from utils import _normalize_path
 
 # To export image into output folder
+APPLY_MFCC = False
 EXPORT_IMAGE = False
 
 # Source Coswara folder for metadata loading
@@ -12,8 +13,16 @@ PREFIX_INPUT = r'../data/Coswara_Data'
 # Path to the extracted data
 EXTRACTED_DATA_PATH = r'../data/extracted'
 
-# Dest path for the post-processing data output
+# MODEL PATH
+PREFIX_MODEL = r'../model'
 PREFIX_OUTPUT = r'../data/raw'
+POSTFIX_MODEL = ''
+
+# PREFIX_OUTPUT = r'D:\Projects\comp-7405-proj\mel_spectrum_no_mfcc'
+# POSTFIX_MODEL = 'mel_norm'
+
+# PREFIX_OUTPUT = r'D:\Projects\comp-7405-proj\mel_spectrum-mfcc-normalization'
+# POSTFIX_MODEL = 'mel_mfcc_norm'
 
 BANNED_ID = [
     'XFX3DxpzWlTsqde0wmliVzvRXnf1', 'pBBuvcoBj7hjmNVYFICT4hQYRGw1', 'jaaBKWGuppchj0ahnBiFzFeuBB23',
@@ -33,8 +42,11 @@ BANNED_ID = [
     'zvXkuEaPb0OEgG4EHx59NqdmamR2', 'U98J2q0NnycYzzUS2BYZpUa55X83',
 ]
 
+# RANDOM SEED
+SEED = 'o-^8-$a$5yb!71f+b6s4-%&!^sy9cqjm(%n8t11=sz%=qrgwpx'
+
 # index_col = ['covid_status', 'test_status']
-index_col = ['test_status']
+index_col = ['covid_status']
 key_col = ['cough-heavy']
 
 

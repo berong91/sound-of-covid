@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.io import wavfile
 
-from data_config import PREFIX_OUTPUT, BANNED_ID, key_col, EXPORT_IMAGE, EXTRACTED_DATA_PATH
+from data_config import PREFIX_OUTPUT, BANNED_ID, key_col, EXPORT_IMAGE, EXTRACTED_DATA_PATH, APPLY_MFCC
 from utils import _normalize_path, stft_spectrogram, mel_filter, mfcc
 
 
@@ -46,8 +46,7 @@ def mfcc_spec(t: np.ndarray, f: np.ndarray, Zxx: np.ndarray, output: str) -> Non
 
 def main():
     NFFT = 256
-    num_filter = 64
-    apply_mfcc = True
+    num_filter = 40
     ban = []
     index_wav = {}
 
@@ -85,14 +84,15 @@ def main():
                 mel_spectrum = mel_filter(spectrogram, sample_rate=sample_rate, NFFT=NFFT, nfilt=num_filter)
 
                 # Mel-frequency Cepstral Coefficients
-                if apply_mfcc:
+                if APPLY_MFCC:
                     mfcc_spectrum = mfcc(mel_spectrum)
 
                 # Mean Normalization
                 # reshape by subtract the freq vector with the mean of that band across each frame
-                mel_spectrum -= (np.mean(mel_spectrum, axis=1) + 1e-8).reshape((mel_spectrum.shape[0], 1))
-                if apply_mfcc:
+                mel_spectrum = mel_spectrum - (np.mean(mel_spectrum, axis=1) + 1e-8).reshape((mel_spectrum.shape[0], 1))
+                if APPLY_MFCC:
                     mfcc_spectrum -= (np.mean(mfcc_spectrum, axis=1) + 1e-8).reshape((mfcc_spectrum.shape[0], 1))
+                    # mfcc_spectrum = mfcc_spectrum - (np.mean(mfcc_spectrum, axis=0) + 1e-8)
 
                 # Export to graph image
                 if EXPORT_IMAGE:
@@ -103,12 +103,12 @@ def main():
 
                     spec(t, f, spectrogram, spec_img)  # show graph
                     mel_spec(t, np.arange(0, mel_spectrum.shape[0], 1) + 1, mel_spectrum, mel_img)  # show graph
-                    if apply_mfcc:
+                    if APPLY_MFCC:
                         mfcc_spec(t, np.arange(0, mfcc_spectrum.shape[0], 1) + 1, mfcc_spectrum, mfcc_img)  # show graph
 
                 # Save data to list
                 index_wav.setdefault(id, np.ndarray)
-                index_wav[id] = mfcc_spectrum if apply_mfcc else mel_spectrum
+                index_wav[id] = mfcc_spectrum if APPLY_MFCC else mel_spectrum
                 print('proceed: {:<30}{:<50}'.format(id, feature))
             except Exception as e:
                 print(e)

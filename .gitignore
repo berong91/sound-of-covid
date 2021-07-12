@@ -1,7 +1,7 @@
 .idea
 data/extracted/**
 data/Coswara-Data/**
-**/train_model*
+model/**
 
 venv
 env
