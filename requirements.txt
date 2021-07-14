@@ -1,0 +1,7 @@
+cudatoolkit
+matplotlib
+numpy
+pandas
+scipy
+tensorflow
+tensorflow-gpu

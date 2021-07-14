@@ -40,20 +40,22 @@ def mel_filter(Zxx: np.ndarray, sample_rate: int, NFFT: int = 256, nfilt: int = 
     filter_banks = np.dot(fbank, Zxx)
     filter_banks = np.where(filter_banks == 0, np.finfo(float).eps, filter_banks)  # Numerical Stability
     filter_banks = 20 * np.log10(filter_banks)  # dB
+    filter_banks *= (filter_banks > 0)
     return filter_banks
 
 
 def mfcc(filter_banks: np.ndarray, num_ceps=20):
     # Mel-frequency Cepstral Coefficients (MFCCs)
-    mfcc = dct(filter_banks, type=2, axis=1, norm='ortho')
-    mfcc = mfcc[1: (num_ceps + 1), :]  # Keep 2-13
+    mfcc = dct(filter_banks, type=2, axis=0, norm='ortho')
+    mfcc *= (mfcc > 0)
+    mfcc = mfcc[1: (num_ceps + 1), :]  # Keep 2-20
     return mfcc
 
 
 def prepare_data(data: np.ndarray,
                  ratio: float,
                  index_col: List[str],
-                 key_col: List[str],
+                 key_col: str,
                  randomize: bool = False,
                  seed=datetime.now()) -> Tuple[np.ndarray, ...]:
     # split the data into training set and test set
